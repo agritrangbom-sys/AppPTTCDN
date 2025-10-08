@@ -8,6 +8,46 @@ st.set_page_config(
     page_title="Phân Tích Báo Cáo Tài Chính - TrungDev x Agribank",
     layout="wide"
 )
+
+# --- Tuỳ chỉnh giao diện Agribank ---
+st.markdown("""
+    <style>
+        .main {
+            background-color: #ffffff;
+        }
+        h1 {
+            color: #9E1B32;
+            font-size: 36px;
+            font-weight: bold;
+        }
+        h2, h3 {
+            color: #00703C;
+        }
+        div.stButton > button {
+            background-color: #9E1B32;
+            color: white;
+            border-radius: 5px;
+            padding: 0.5em 1em;
+            font-weight: bold;
+        }
+        div.stButton > button:hover {
+            background-color: #00703C;
+            color: white;
+        }
+        .chatbox {
+            background-color: #f9f9f9;
+            border: 2px solid #00703C;
+            padding: 1em;
+            border-radius: 10px;
+        }
+        textarea {
+            border: 1px solid #9E1B32 !important;
+        }
+        .stSpinner > div > div {
+            color: #9E1B32 !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
 import streamlit.components.v1 as components
 
 # --- Chức năng 6: Chat nổi dạng bong bóng và cửa sổ di chuyển ---
@@ -168,46 +208,6 @@ components.html("""
   }
 </script>
 """, height=600)
-# --- Tuỳ chỉnh giao diện Agribank ---
-st.markdown("""
-    <style>
-        .main {
-            background-color: #ffffff;
-        }
-        h1 {
-            color: #9E1B32;
-            font-size: 36px;
-            font-weight: bold;
-        }
-        h2, h3 {
-            color: #00703C;
-        }
-        div.stButton > button {
-            background-color: #9E1B32;
-            color: white;
-            border-radius: 5px;
-            padding: 0.5em 1em;
-            font-weight: bold;
-        }
-        div.stButton > button:hover {
-            background-color: #00703C;
-            color: white;
-        }
-        .chatbox {
-            background-color: #f9f9f9;
-            border: 2px solid #00703C;
-            padding: 1em;
-            border-radius: 10px;
-        }
-        textarea {
-            border: 1px solid #9E1B32 !important;
-        }
-        .stSpinner > div > div {
-            color: #9E1B32 !important;
-        }
-    </style>
-""", unsafe_allow_html=True)
-
 st.title("Phân Tích Báo Cáo Tài Chính 📊")
 
 @st.cache_data
