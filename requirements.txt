@@ -3,3 +3,4 @@ openpyxl
 streamlit
 plotly
 google-generativeai
+streamlit-chat # Thêm dòng này
