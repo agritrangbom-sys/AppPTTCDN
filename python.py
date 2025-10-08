@@ -57,7 +57,7 @@ def process_financial_data(df):
 def get_ai_analysis(data_for_ai, api_key):
     """Gửi dữ liệu phân tích đến Gemini API và nhận nhận xét."""
     try:
-        client = genai.Client(api_key="AIzaSyAGxzXf_kTLekMKRhPlDyFkK2uRFZSqt8o")
+        client = genai.Client(api_key=api_key)
         model_name = 'gemini-2.5-flash' 
 
         prompt = f"""
@@ -166,7 +166,7 @@ if uploaded_file is not None:
             }).to_markdown(index=False) 
 
             if st.button("Yêu cầu AI Phân tích"):
-                api_key = st.secrets.get("GEMINI_API_KEY") 
+                api_key = st.secrets.get("AIzaSyAGxzXf_kTLekMKRhPlDyFkK2uRFZSqt8o") 
                 
                 if api_key:
                     with st.spinner('Đang gửi dữ liệu và chờ Gemini phân tích...'):
