@@ -135,38 +135,50 @@ if uploaded_file is not None:
 else:
     st.info("Vui lòng tải lên file Excel để bắt đầu phân tích.")
 
-# --- Chức năng 6: Chat hỏi đáp với Gemini ---
-st.subheader("6. Hỏi đáp với Chuyên gia Gemini 🤖")
+# --- Chức năng 6: Chat hỏi đáp với Gemini (Dạng Popup) ---
+st.subheader("6. Chat với Chuyên gia Gemini 🤖")
 
-with st.expander("💬 Mở khung chat để hỏi Gemini về tài chính hoặc bất kỳ chủ đề nào"):
-    user_question = st.text_area(
-        "Nhập câu hỏi của bạn:",
-        placeholder="Ví dụ: Tình hình ngành ngân hàng hiện nay ra sao?",
-        height=100
-    )
+# Tạo nút bong bóng chat
+if "show_chat_popup" not in st.session_state:
+    st.session_state.show_chat_popup = False
 
-    if st.button("Gửi câu hỏi cho Gemini"):
-        api_key = st.secrets.get("GEMINI_API_KEY")
+# Hiển thị nút bong bóng
+chat_col = st.columns([0.85, 0.15])[1]
+with chat_col:
+    if st.button("💬 Mở Chat"):
+        st.session_state.show_chat_popup = not st.session_state.show_chat_popup
 
-        if not user_question.strip():
-            st.warning("Vui lòng nhập câu hỏi trước khi gửi.")
-        elif not api_key:
-            st.error("Không tìm thấy Khóa API. Vui lòng cấu hình 'GEMINI_API_KEY' trong Streamlit Secrets.")
-        else:
-            try:
-                client = genai.Client(api_key=api_key)
-                model_name = 'gemini-2.5-flash'
+# Nếu đã nhấn nút, hiển thị khung chat
+if st.session_state.show_chat_popup:
+    with st.container():
+        st.markdown("### 💬 Gemini Chat Box")
+        user_question = st.text_area(
+            "Nhập câu hỏi của bạn:",
+            placeholder="Ví dụ: Tình hình ngành ngân hàng hiện nay ra sao?",
+            height=100
+        )
 
-                with st.spinner("Đang gửi câu hỏi đến Gemini..."):
-                    response = client.models.generate_content(
-                        model=model_name,
-                        contents=user_question
-                    )
-                    st.markdown("**Phản hồi từ Gemini:**")
-                    st.success(response.text)
+        if st.button("📨 Gửi câu hỏi"):
+            api_key = st.secrets.get("GEMINI_API_KEY")
 
-            except APIError as e:
-                st.error(f"Lỗi gọi Gemini API: {e}")
-            except Exception as e:
-                st.error(f"Đã xảy ra lỗi: {e}")
+            if not user_question.strip():
+                st.warning("Vui lòng nhập câu hỏi trước khi gửi.")
+            elif not api_key:
+                st.error("Không tìm thấy Khóa API. Vui lòng cấu hình 'GEMINI_API_KEY' trong Streamlit Secrets.")
+            else:
+                try:
+                    client = genai.Client(api_key=api_key)
+                    model_name = 'gemini-2.5-flash'
 
+                    with st.spinner("Đang gửi câu hỏi đến Gemini..."):
+                        response = client.models.generate_content(
+                            model=model_name,
+                            contents=user_question
+                        )
+                        st.markdown("**Phản hồi từ Gemini:**")
+                        st.success(response.text)
+
+                except APIError as e:
+                    st.error(f"Lỗi gọi Gemini API: {e}")
+                except Exception as e:
+                    st.error(f"Đã xảy ra lỗi: {e}")
