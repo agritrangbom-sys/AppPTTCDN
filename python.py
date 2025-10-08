@@ -5,13 +5,52 @@ from google.genai.errors import APIError
 
 # --- Cấu hình Trang Streamlit ---
 st.set_page_config(
-    page_title="App Phân Tích Báo Cáo Tài Chính - Bốc phét bởi TrungDev",
+    page_title="Phân Tích Báo Cáo Tài Chính - TrungDev x Agribank",
     layout="wide"
 )
 
-st.title("Trungdev Phân Tích Báo Cáo Tài Chính 📊")
+# --- Tuỳ chỉnh giao diện Agribank ---
+st.markdown("""
+    <style>
+        .main {
+            background-color: #ffffff;
+        }
+        h1 {
+            color: #9E1B32;
+            font-size: 36px;
+            font-weight: bold;
+        }
+        h2, h3 {
+            color: #00703C;
+        }
+        div.stButton > button {
+            background-color: #9E1B32;
+            color: white;
+            border-radius: 5px;
+            padding: 0.5em 1em;
+            font-weight: bold;
+        }
+        div.stButton > button:hover {
+            background-color: #00703C;
+            color: white;
+        }
+        .chatbox {
+            background-color: #f9f9f9;
+            border: 2px solid #00703C;
+            padding: 1em;
+            border-radius: 10px;
+        }
+        textarea {
+            border: 1px solid #9E1B32 !important;
+        }
+        .stSpinner > div > div {
+            color: #9E1B32 !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
-# --- Hàm tính toán chính ---
+st.title("Phân Tích Báo Cáo Tài Chính 📊")
+
 @st.cache_data
 def process_financial_data(df):
     numeric_cols = ['Năm trước', 'Năm sau']
@@ -37,7 +76,6 @@ def process_financial_data(df):
 
     return df
 
-# --- Hàm gọi Gemini API ---
 def get_ai_analysis(data_for_ai, api_key):
     try:
         client = genai.Client(api_key=api_key)
@@ -63,7 +101,6 @@ def get_ai_analysis(data_for_ai, api_key):
     except Exception as e:
         return f"Đã xảy ra lỗi không xác định: {e}"
 
-# --- Chức năng 1: Tải File ---
 uploaded_file = st.file_uploader(
     "1. Tải file Excel Báo cáo Tài chính (Chỉ tiêu | Năm trước | Năm sau)",
     type=['xlsx', 'xls']
@@ -135,50 +172,11 @@ if uploaded_file is not None:
 else:
     st.info("Vui lòng tải lên file Excel để bắt đầu phân tích.")
 
-# --- Chức năng 6: Chat hỏi đáp với Gemini (Dạng Popup) ---
+# --- Chức năng 6: Chat popup với Gemini ---
 st.subheader("6. Chat với Chuyên gia Gemini 🤖")
 
-# Tạo nút bong bóng chat
 if "show_chat_popup" not in st.session_state:
     st.session_state.show_chat_popup = False
 
-# Hiển thị nút bong bóng
 chat_col = st.columns([0.85, 0.15])[1]
-with chat_col:
-    if st.button("💬 Mở Chat"):
-        st.session_state.show_chat_popup = not st.session_state.show_chat_popup
-
-# Nếu đã nhấn nút, hiển thị khung chat
-if st.session_state.show_chat_popup:
-    with st.container():
-        st.markdown("### 💬 Gemini Chat Box")
-        user_question = st.text_area(
-            "Nhập câu hỏi của bạn:",
-            placeholder="Ví dụ: Tình hình ngành ngân hàng hiện nay ra sao?",
-            height=100
-        )
-
-        if st.button("📨 Gửi câu hỏi"):
-            api_key = st.secrets.get("GEMINI_API_KEY")
-
-            if not user_question.strip():
-                st.warning("Vui lòng nhập câu hỏi trước khi gửi.")
-            elif not api_key:
-                st.error("Không tìm thấy Khóa API. Vui lòng cấu hình 'GEMINI_API_KEY' trong Streamlit Secrets.")
-            else:
-                try:
-                    client = genai.Client(api_key=api_key)
-                    model_name = 'gemini-2.5-flash'
-
-                    with st.spinner("Đang gửi câu hỏi đến Gemini..."):
-                        response = client.models.generate_content(
-                            model=model_name,
-                            contents=user_question
-                        )
-                        st.markdown("**Phản hồi từ Gemini:**")
-                        st.success(response.text)
-
-                except APIError as e:
-                    st.error(f"Lỗi gọi Gemini API: {e}")
-                except Exception as e:
-                    st.error(f"Đã xảy ra lỗi: {e}")
+with chat
