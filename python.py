@@ -136,16 +136,16 @@ else:
     st.info("Vui lòng tải lên file Excel để bắt đầu phân tích.")
 
 # --- Chức năng 6: Chat hỏi đáp với Gemini ---
-st.subheader("6. Hỏi đáp với Chuyên gia Gemini 🤖")
+st.subheader("6. Hỏi đáp với Chuyên gia TrungDev 🤖")
 
-with st.expander("💬 Mở khung chat để hỏi Gemini về tài chính hoặc bất kỳ chủ đề nào"):
+with st.expander("💬 Mở khung chat để hỏi TrungDev về tài chính hoặc bất kỳ chủ đề nào"):
     user_question = st.text_area(
         "Nhập câu hỏi của bạn:",
         placeholder="Ví dụ: Tình hình ngành ngân hàng hiện nay ra sao?",
         height=100
     )
 
-    if st.button("Gửi câu hỏi cho Gemini"):
+    if st.button("Gửi câu hỏi cho TrungDev"):
         api_key = st.secrets.get("GEMINI_API_KEY")
 
         if not user_question.strip():
@@ -157,13 +157,8 @@ with st.expander("💬 Mở khung chat để hỏi Gemini về tài chính hoặ
                 client = genai.Client(api_key=api_key)
                 model_name = 'gemini-2.5-flash'
 
-                with st.spinner("Đang gửi câu hỏi đến Gemini..."):
+                with st.spinner("Đang gửi câu hỏi đến TrungDev..."):
                     response = client.models.generate_content(
                         model=model_name,
                         contents=user_question
-                    )
-                    st.markdown("**Phản hồi từ Gemini:**")
-                    st.success(response.text)
-            except APIError as e:
-                st.error(f"Lỗi gọi Gemini API: {e}")
-            except Exception as e:
+                   
