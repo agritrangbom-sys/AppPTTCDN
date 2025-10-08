@@ -171,92 +171,93 @@ if uploaded_file is not None:
         st.error(f"Lỗi xử lý file: {e}")
 else:
     st.info("Vui lòng tải lên file Excel để bắt đầu phân tích.")
-
 import streamlit.components.v1 as components
 
-# --- Chức năng 6: Chat nổi dạng bong bóng 3D ---
+# --- Chức năng 6: Chat nổi dạng bong bóng và cửa sổ di chuyển ---
 st.subheader("6. Chat nổi với Gemini 💬")
 
 components.html("""
 <style>
-#chatBubble {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 60px;
-  height: 60px;
-  background-color: #9E1B32;
-  border-radius: 50%;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  cursor: pointer;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 28px;
-  font-weight: bold;
-}
+  #chatBubble {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background-color: #9E1B32;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    cursor: move;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    user-select: none;
+  }
 
-#chatWindow {
-  position: fixed;
-  bottom: 100px;
-  right: 30px;
-  width: 350px;
-  height: 450px;
-  background: rgba(255,255,255,0.95);
-  border: 2px solid #9E1B32;
-  border-radius: 15px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-  z-index: 9998;
-  display: none;
-  flex-direction: column;
-  overflow: hidden;
-  backdrop-filter: blur(8px);
-}
+  #chatWindow {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    width: 350px;
+    height: 450px;
+    background: rgba(255,255,255,0.95);
+    border: 2px solid #9E1B32;
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    z-index: 9998;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    backdrop-filter: blur(8px);
+    user-select: none;
+  }
 
-#chatHeader {
-  background-color: #9E1B32;
-  color: white;
-  padding: 10px;
-  font-weight: bold;
-  text-align: center;
-}
+  #chatHeader {
+    background-color: #9E1B32;
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+    text-align: center;
+    cursor: move;
+  }
 
-#chatBody {
-  flex: 1;
-  padding: 10px;
-  overflow-y: auto;
-  font-size: 14px;
-}
+  #chatBody {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    font-size: 14px;
+  }
 
-#chatInput {
-  padding: 10px;
-  border-top: 1px solid #ccc;
-  display: flex;
-}
+  #chatInput {
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    display: flex;
+  }
 
-#chatInput input {
-  flex: 1;
-  padding: 8px;
-  border: 1px solid #9E1B32;
-  border-radius: 5px;
-}
+  #chatInput input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #9E1B32;
+    border-radius: 5px;
+  }
 
-#chatInput button {
-  margin-left: 8px;
-  background-color: #9E1B32;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 5px;
-  cursor: pointer;
-}
+  #chatInput button {
+    margin-left: 8px;
+    background-color: #9E1B32;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 
-#chatInput button:hover {
-  background-color: #00703C;
-}
-
+  #chatInput button:hover {
+    background-color: #00703C;
+  }
 </style>
 
 <div id="chatBubble" onclick="toggleChat()">💬</div>
@@ -273,59 +274,60 @@ components.html("""
 </div>
 
 <script>
-let isDragging = false;
-let offset = [0, 0];
-const chatWindow = document.getElementById("chatWindow");
-const chatBubble = document.getElementById("chatBubble");
-
-chatHeader = document.getElementById("chatHeader");
-chatHeader.style.cursor = "move";
-chatHeader.addEventListener("mousedown", function(e) {
-  isDragging = true;
-  offset = [
-    chatWindow.offsetLeft - e.clientX,
-    chatWindow.offsetTop - e.clientY
-  ];
-}, true);
-
-document.addEventListener("mouseup", function() {
-  isDragging = false;
-}, true);
-
-document.addEventListener("mousemove", function(e) {
-  e.preventDefault();
-  if (isDragging) {
-    chatWindow.style.left = (e.clientX + offset[0]) + "px";
-    chatWindow.style.top = (e.clientY + offset[1]) + "px";
-    chatWindow.style.bottom = "auto";
-    chatWindow.style.right = "auto";
+  // Toggle chat window
+  function toggleChat() {
+    const chatWindow = document.getElementById("chatWindow");
+    chatWindow.style.display = chatWindow.style.display === "none" ? "flex" : "none";
   }
-}, true);
 
-function toggleChat() {
-  if (chatWindow.style.display === "none") {
-    chatWindow.style.display = "flex";
-  } else {
-    chatWindow.style.display = "none";
+  // Gửi tin nhắn
+  function sendMessage() {
+    const input = document.getElementById("userInput");
+    const chatBody = document.getElementById("chatBody");
+    const userText = input.value.trim();
+    if (userText === "") return;
+
+    const userMsg = document.createElement("p");
+    userMsg.innerHTML = "<b>Bạn:</b> " + userText;
+    chatBody.appendChild(userMsg);
+
+    const aiMsg = document.createElement("p");
+    aiMsg.innerHTML = "<b>Gemini:</b> Đang xử lý câu hỏi...";
+    chatBody.appendChild(aiMsg);
+
+    input.value = "";
+    chatBody.scrollTop = chatBody.scrollHeight;
   }
-}
 
-function sendMessage() {
-  const input = document.getElementById("userInput");
-  const chatBody = document.getElementById("chatBody");
-  const userText = input.value.trim();
-  if (userText === "") return;
+  // Di chuyển cửa sổ chat
+  makeDraggable("chatWindow", "chatHeader");
+  makeDraggable("chatBubble", null);
 
-  const userMsg = document.createElement("p");
-  userMsg.innerHTML = "<b>Bạn:</b> " + userText;
-  chatBody.appendChild(userMsg);
+  function makeDraggable(elementId, handleId) {
+    const el = document.getElementById(elementId);
+    const handle = handleId ? document.getElementById(handleId) : el;
+    let offsetX = 0, offsetY = 0, isDragging = false;
 
-  const aiMsg = document.createElement("p");
-  aiMsg.innerHTML = "<b>Gemini:</b> Đang xử lý câu hỏi...";
-  chatBody.appendChild(aiMsg);
+    handle.addEventListener("mousedown", function(e) {
+      isDragging = true;
+      offsetX = e.clientX - el.getBoundingClientRect().left;
+      offsetY = e.clientY - el.getBoundingClientRect().top;
+      document.body.style.userSelect = "none";
+    });
 
-  input.value = "";
-  chatBody.scrollTop = chatBody.scrollHeight;
-}
+    document.addEventListener("mouseup", function() {
+      isDragging = false;
+      document.body.style.userSelect = "auto";
+    });
+
+    document.addEventListener("mousemove", function(e) {
+      if (isDragging) {
+        el.style.left = (e.clientX - offsetX) + "px";
+        el.style.top = (e.clientY - offsetY) + "px";
+        el.style.right = "auto";
+        el.style.bottom = "auto";
+      }
+    });
+  }
 </script>
 """, height=600)
