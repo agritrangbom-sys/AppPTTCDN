@@ -171,9 +171,6 @@ if uploaded_file is not None:
         st.error(f"Lỗi xử lý file: {e}")
 else:
     st.info("Vui lòng tải lên file Excel để bắt đầu phân tích.")
-
-import streamlit.components.v1 as components
-
 # chatbox
 import streamlit.components.v1 as components
 
@@ -189,7 +186,7 @@ components.html("""
     border-radius: 50%;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     cursor: move;
-    z-index: 9999;
+    z-index: 999999;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -209,7 +206,7 @@ components.html("""
     border: 2px solid #9E1B32;
     border-radius: 15px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-    z-index: 9998;
+    z-index: 999998;
     display: none;
     flex-direction: column;
     overflow: hidden;
@@ -224,6 +221,18 @@ components.html("""
     font-weight: bold;
     text-align: center;
     cursor: move;
+    position: relative;
+  }
+
+  #closeBtn {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
   }
 
   #chatBody {
@@ -264,7 +273,10 @@ components.html("""
 <div id="chatBubble" onclick="openChat()">💬</div>
 
 <div id="chatWindow">
-  <div id="chatHeader">Gemini Chat</div>
+  <div id="chatHeader">
+    Gemini Chat
+    <button id="closeBtn" onclick="closeChat()">❌</button>
+  </div>
   <div id="chatBody">
     <p><i>Xin chào! Bạn muốn hỏi gì hôm nay?</i></p>
   </div>
@@ -281,6 +293,11 @@ components.html("""
   function openChat() {
     bubble.style.display = "none";
     chatWindow.style.display = "flex";
+  }
+
+  function closeChat() {
+    chatWindow.style.display = "none";
+    bubble.style.display = "flex";
   }
 
   function sendMessage() {
