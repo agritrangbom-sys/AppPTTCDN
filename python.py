@@ -10,79 +10,110 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- Tuỳ chỉnh giao diện Agribank với hiệu ứng 3D và chuyên nghiệp ---
+# --- Tuỳ chỉnh giao diện Agribank với hiệu ứng 3D, nổi khối và chuyên nghiệp tối ưu ---
 st.markdown("""
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f0f2f6; /* Nền xám nhạt */
+            background: linear-gradient(135deg, #f0f2f6 0%, #e9ebee 100%); /* Nền gradient nhẹ nhàng */
+            color: #333333;
         }
         .main {
-            background-color: #ffffff; /* Nền trắng cho nội dung chính */
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1); /* Hiệu ứng bóng đổ nhẹ */
-            padding: 30px;
-            margin-top: 20px;
+            background-color: #ffffff;
+            border-radius: 16px; /* Bo tròn nhiều hơn */
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.08); /* Bóng đổ đa lớp, sâu hơn */
+            padding: 40px;
+            margin-top: 25px;
+            border: 1px solid #e0e0e0; /* Viền nhẹ tạo khối */
         }
         h1 {
             color: #9E1B32; /* Đỏ đô Agribank */
-            font-size: 42px;
-            font-weight: 700;
+            font-size: 48px; /* To hơn */
+            font-weight: 900; /* Rất đậm */
             text-align: center;
             margin-bottom: 30px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* Hiệu ứng chữ nổi */
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.15); /* Bóng đổ chữ rõ hơn */
+            letter-spacing: -0.5px; /* Tối ưu khoảng cách chữ */
+            position: relative;
+        }
+        h1::after { /* Đường gạch dưới 3D cho H1 */
+            content: '';
+            display: block;
+            width: 100px;
+            height: 5px;
+            background: linear-gradient(90deg, #9E1B32 0%, #00703C 100%);
+            margin: 15px auto 0 auto;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
         h2 {
             color: #00703C; /* Xanh lá Agribank */
-            font-size: 28px;
+            font-size: 32px; /* To hơn */
             font-weight: 700;
-            border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 10px;
-            margin-top: 40px;
-            margin-bottom: 20px;
+            border-bottom: 3px solid #e0e0e0; /* Gạch dưới đậm hơn */
+            padding-bottom: 12px;
+            margin-top: 50px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        h2::before { /* Icon hoặc hình ảnh nhỏ đầu H2 */
+            content: '✨';
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            color: #9E1B32;
         }
         h3 {
             color: #9E1B32; /* Đỏ đô Agribank */
-            font-size: 22px;
+            font-size: 24px; /* To hơn */
             font-weight: 700;
-            margin-top: 30px;
-            margin-bottom: 15px;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            border-left: 5px solid #00703C; /* Viền trái xanh lá */
+            padding-left: 10px;
+            line-height: 1.2;
         }
         div.stButton > button {
-            background-color: #9E1B32; /* Đỏ đô */
+            background: linear-gradient(135deg, #9E1B32 0%, #B03A50 100%); /* Gradient cho nút */
             color: white;
             border: none;
-            border-radius: 8px;
-            padding: 0.8em 1.8em;
-            font-weight: bold;
-            font-size: 16px;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 10px rgba(158, 27, 50, 0.3); /* Bóng đổ nút */
+            border-radius: 10px; /* Bo tròn nhiều hơn */
+            padding: 1em 2em; /* To hơn */
+            font-weight: 700; /* Đậm hơn */
+            font-size: 17px;
+            letter-spacing: 0.8px;
+            box-shadow: 0 6px 15px rgba(158, 27, 50, 0.4), inset 0 1px 3px rgba(255,255,255,0.4); /* Bóng đổ 3D */
             transition: all 0.3s ease-in-out;
             cursor: pointer;
+            text-transform: uppercase; /* Chữ hoa */
         }
         div.stButton > button:hover {
-            background-color: #00703C; /* Xanh lá khi hover */
-            box-shadow: 0 6px 15px rgba(0, 112, 60, 0.4);
-            transform: translateY(-2px); /* Hiệu ứng nhấn */
+            background: linear-gradient(135deg, #00703C 0%, #008C4A 100%); /* Gradient xanh lá khi hover */
+            box-shadow: 0 8px 20px rgba(0, 112, 60, 0.5), inset 0 1px 5px rgba(255,255,255,0.5);
+            transform: translateY(-3px) scale(1.02); /* Nhấn và phóng to nhẹ */
         }
         .stFileUploader label {
-            font-size: 18px;
+            font-size: 20px; /* To hơn */
             font-weight: 500;
-            color: #333333;
+            color: #222222;
         }
         .stFileUploader div[data-testid="stFileUploaderDropzone"] {
-            border: 2px dashed #9E1B32;
-            border-radius: 10px;
-            padding: 20px;
+            border: 3px dashed #9E1B32; /* Viền đậm hơn */
+            background-color: #fcfdff;
+            border-radius: 12px;
+            padding: 25px; /* Đệm to hơn */
             text-align: center;
             transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         .stFileUploader div[data-testid="stFileUploaderDropzone"]:hover {
             border-color: #00703C;
-            background-color: #f9f9f9;
+            background-color: #e9f5ed; /* Màu nền nhẹ khi hover */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         .stSpinner > div > div {
             color: #9E1B32 !important;
@@ -91,202 +122,258 @@ st.markdown("""
             background-color: #9E1B32 !important;
         }
         .stDataFrame {
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.05); /* Bóng đổ sâu hơn */
+            border: 1px solid #e0e0e0;
+            margin-top: 20px;
         }
         .stMetric {
             background-color: #f8f8f8;
-            border-left: 5px solid #00703C;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            margin-bottom: 15px;
+            border-left: 6px solid #00703C; /* Viền đậm hơn */
+            padding: 20px; /* Đệm to hơn */
+            border-radius: 10px; /* Bo tròn nhiều hơn */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Bóng đổ sâu hơn */
+            margin-bottom: 20px;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .stMetric::before { /* Hiệu ứng ánh sáng nhẹ */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 70%);
+            transition: all 0.5s ease;
+            transform: translateX(-100%);
+        }
+        .stMetric:hover::before {
+            transform: translateX(100%);
         }
         .stMetric:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-5px) scale(1.01); /* Nổi lên và phóng to nhẹ */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
         .stMetric > div[data-testid="stMetricLabel"] {
-            color: #333333;
+            color: #444444;
             font-weight: 500;
+            font-size: 16px;
         }
         .stMetric > div[data-testid="stMetricValue"] {
             color: #9E1B32;
-            font-size: 28px;
-            font-weight: 700;
+            font-size: 34px; /* To hơn */
+            font-weight: 900; /* Rất đậm */
+            margin-top: 5px;
+            letter-spacing: -0.5px;
         }
         .stAlert {
-            border-left: 5px solid;
-            border-radius: 8px;
-            padding: 10px;
-            margin-top: 20px;
-            font-size: 16px;
+            border-left: 6px solid; /* Viền đậm hơn */
+            border-radius: 10px; /* Bo tròn nhiều hơn */
+            padding: 15px;
+            margin-top: 25px;
+            font-size: 17px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         .stAlert.info { border-color: #00703C; background-color: #e6f7ed; color: #005a30; }
         .stAlert.warning { border-color: #ffc107; background-color: #fff3cd; color: #856404; }
         .stAlert.error { border-color: #dc3545; background-color: #f8d7da; color: #721c24; }
+        .stAlert p { margin: 0; }
 
         /* Chatbox styles */
         #chatBubble {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            width: 70px; /* To hơn */
-            height: 70px;
-            background-color: #9E1B32; /* Đỏ đô Agribank */
+            width: 75px; /* Lớn hơn */
+            height: 75px;
+            background: linear-gradient(135deg, #9E1B32 0%, #B03A50 100%); /* Gradient Agribank */
             border-radius: 50%;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4); /* Bóng đổ mạnh hơn */
-            cursor: grab; /* Thay đổi con trỏ */
-            z-index: 10000; /* Đảm bảo nổi trên tất cả */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.5); /* Bóng đổ 3D sâu */
+            cursor: grab;
+            z-index: 10000;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 32px;
-            font-weight: bold;
+            font-size: 36px; /* To hơn */
+            font-weight: 900;
             transition: all 0.3s ease;
+            user-select: none;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
         }
         #chatBubble:active {
             cursor: grabbing;
+            transform: scale(0.98); /* Hiệu ứng nhấn */
         }
         #chatBubble:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: scale(1.1); /* Phóng to nhẹ khi hover */
+            box-shadow: 0 12px 35px rgba(0,0,0,0.6), inset 0 2px 6px rgba(255,255,255,0.6);
         }
 
         #chatWindow {
             position: fixed;
-            bottom: 110px; /* Vị trí mặc định cao hơn một chút so với bubble */
+            bottom: 120px; /* Vị trí mặc định cao hơn một chút so với bubble */
             right: 30px;
-            width: 380px; /* Rộng hơn */
-            height: 500px; /* Cao hơn */
-            background: rgba(255,255,255,0.98); /* Gần như trắng hoàn toàn */
+            width: 400px; /* Rộng hơn */
+            height: 550px; /* Cao hơn */
+            background: rgba(255,255,255,0.98);
             border: 2px solid #9E1B32; /* Viền đỏ đô */
-            border-radius: 18px; /* Bo tròn nhiều hơn */
-            box-shadow: 0 12px 35px rgba(0,0,0,0.45); /* Bóng đổ mạnh và rõ */
+            border-radius: 20px; /* Bo tròn nhiều hơn */
+            box-shadow: 0 15px 45px rgba(0,0,0,0.5), 0 5px 15px rgba(0,0,0,0.2); /* Bóng đổ 3D rõ nét */
             z-index: 9999;
             display: none;
             flex-direction: column;
             overflow: hidden;
-            backdrop-filter: blur(10px); /* Blur mạnh hơn */
+            backdrop-filter: blur(12px); /* Blur mạnh hơn */
             font-family: 'Roboto', sans-serif;
+            user-select: none;
         }
 
         #chatHeader {
-            background-color: #9E1B32; /* Đỏ đô */
+            background: linear-gradient(90deg, #9E1B32 0%, #B03A50 100%); /* Gradient cho header */
             color: white;
-            padding: 12px 15px;
+            padding: 15px 20px;
             font-weight: 700;
-            font-size: 18px;
+            font-size: 20px;
             text-align: center;
             cursor: grab;
             position: relative;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-top-left-radius: 18px; /* Bo tròn theo cửa sổ */
+            border-top-right-radius: 18px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            box-shadow: inset 0 -2px 5px rgba(0,0,0,0.2); /* Bóng đổ phía trong */
         }
         #chatHeader:active {
             cursor: grabbing;
         }
 
         #closeBtn {
-            background: transparent;
+            background: none;
             border: none;
             color: white;
-            font-size: 24px;
+            font-size: 28px; /* To hơn */
             cursor: pointer;
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, color 0.2s ease;
+            padding: 0;
+            line-height: 1;
         }
         #closeBtn:hover {
-            transform: rotate(90deg);
+            transform: rotate(180deg) scale(1.1); /* Xoay và phóng to */
+            color: #f0f0f0;
         }
 
         #chatBody {
             flex: 1;
             padding: 15px;
             overflow-y: auto;
-            font-size: 15px;
+            font-size: 16px;
             color: #333;
-            background-color: #fdfdfd;
+            background-color: #fcfdff;
+            line-height: 1.6;
+            scroll-behavior: smooth;
         }
         #chatBody p {
-            margin-bottom: 8px;
-            line-height: 1.5;
-        }
-        #chatBody p:last-child {
-            margin-bottom: 0;
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            word-wrap: break-word; /* Đảm bảo ngắt dòng */
+            max-width: 90%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         .user-message {
             text-align: right;
-            color: #9E1B32;
+            background-color: #e6f7ed; /* Nền xanh nhạt */
+            color: #005a30;
+            margin-left: auto; /* Đẩy sang phải */
+            border-bottom-right-radius: 2px;
+            border: 1px solid #cce8d6;
         }
         .ai-message {
             text-align: left;
-            color: #00703C;
+            background-color: #f0f2f6; /* Nền xám nhạt */
+            color: #444;
+            margin-right: auto; /* Đẩy sang trái */
+            border-bottom-left-radius: 2px;
+            border: 1px solid #e0e0e0;
         }
         .ai-message strong, .user-message strong {
             font-weight: 700;
         }
 
         #chatInput {
-            padding: 12px 15px;
+            padding: 15px 20px;
             border-top: 1px solid #e0e0e0;
             display: flex;
             background-color: #f0f2f6;
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
         }
 
         #chatInput input {
             flex: 1;
-            padding: 10px 15px;
-            border: 1px solid #9E1B32;
-            border-radius: 25px; /* Bo tròn hơn */
-            margin-right: 10px;
-            font-size: 15px;
+            padding: 12px 18px;
+            border: 2px solid #9E1B32; /* Viền đậm hơn */
+            border-radius: 28px; /* Bo tròn nhiều hơn */
+            margin-right: 12px;
+            font-size: 16px;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background-color: white;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
         }
         #chatInput input:focus {
             border-color: #00703C;
-            box-shadow: 0 0 0 3px rgba(0, 112, 60, 0.2);
+            box-shadow: 0 0 0 4px rgba(0, 112, 60, 0.25), inset 0 1px 5px rgba(0,0,0,0.15);
             outline: none;
         }
 
         #chatInput button {
-            background-color: #9E1B32; /* Đỏ đô */
+            background: linear-gradient(135deg, #00703C 0%, #008C4A 100%); /* Gradient xanh lá */
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 25px; /* Bo tròn hơn */
+            padding: 12px 22px;
+            border-radius: 28px; /* Bo tròn nhiều hơn */
             cursor: pointer;
             font-weight: bold;
-            font-size: 15px;
-            box-shadow: 0 3px 8px rgba(158, 27, 50, 0.25);
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(0, 112, 60, 0.3), inset 0 1px 3px rgba(255,255,255,0.4);
             transition: all 0.3s ease;
+            text-transform: uppercase;
         }
         #chatInput button:hover {
-            background-color: #00703C; /* Xanh lá khi hover */
-            box-shadow: 0 4px 10px rgba(0, 112, 60, 0.3);
+            background: linear-gradient(135deg, #9E1B32 0%, #B03A50 100%); /* Đỏ đô khi hover */
+            box-shadow: 0 6px 15px rgba(158, 27, 50, 0.4), inset 0 1px 5px rgba(255,255,255,0.5);
             transform: translateY(-1px);
         }
     </style>
 """, unsafe_allow_html=True)
 
 # Thêm logo Agribank
-st.sidebar.image("https://www.agribank.com.vn/assets/theme_v2/images/logo.png", width=200)
+st.sidebar.image("https://www.agribank.com.vn/assets/theme_v2/images/logo.png", width=220) # Logo lớn hơn một chút
+st.sidebar.markdown("---")
 st.sidebar.header("Hướng dẫn sử dụng")
 st.sidebar.markdown("""
-1.  **Tải file Excel:** Chọn file Báo cáo tài chính của bạn.
-2.  **Xem kết quả:** Bảng phân tích tốc độ tăng trưởng và tỷ trọng cơ cấu sẽ hiển thị.
-3.  **Kiểm tra chỉ số:** Xem nhanh các chỉ số tài chính cơ bản.
-4.  **Phân tích AI:** Nhấn nút để nhận nhận xét từ Gemini AI.
----
-**Liên hệ:** [TrungDev](mailto:your.email@example.com)
-""")
+<div style="font-size: 16px; line-height: 1.8;">
+<p>1.  **Tải file Excel:** Chọn file Báo cáo tài chính của bạn (định dạng 'Chỉ tiêu | Năm trước | Năm sau').</p>
+<p>2.  **Xem kết quả:** Bảng phân tích tốc độ tăng trưởng và tỷ trọng cơ cấu sẽ hiển thị rõ ràng.</p>
+<p>3.  **Kiểm tra chỉ số:** Xem nhanh các chỉ số tài chính cơ bản đã được tính toán.</p>
+<p>4.  **Phân tích AI:** Nhấn nút để nhận nhận xét chuyên sâu từ Gemini AI.</p>
+<p>5.  **Chatbot hỗ trợ:** Sử dụng biểu tượng chat để hỏi đáp nhanh về các vấn đề liên quan.</p>
+</div>
+""", unsafe_allow_html=True)
+st.sidebar.markdown("---")
+st.sidebar.markdown("### <span style='color:#9E1B32;'>Trung tâm phát triển AI Agribank</span>", unsafe_allow_html=True)
+st.sidebar.markdown("<p style='font-size: 14px; color: #555;'>Phiên bản: 1.2.0</p>", unsafe_allow_html=True)
 
 
-st.title("Phân Tích Báo Cáo Tài Chính")
-st.markdown("### <span style='color:#00703C;'>Giải pháp AI cho Agribank</span>", unsafe_allow_html=True)
+st.title("Hệ Thống Phân Tích Báo Cáo Tài Chính")
+st.markdown("### <span style='color:#00703C;'>Giải pháp AI đột phá dành cho Agribank</span>", unsafe_allow_html=True)
 
 @st.cache_data
 def process_financial_data(df):
@@ -300,7 +387,7 @@ def process_financial_data(df):
 
     tong_tai_san_row = df[df['Chỉ tiêu'].str.contains('TỔNG CỘNG TÀI SẢN', case=False, na=False)]
     if tong_tai_san_row.empty:
-        raise ValueError("Không tìm thấy chỉ tiêu 'TỔNG CỘNG TÀI SẢN'.")
+        raise ValueError("Không tìm thấy chỉ tiêu 'TỔNG CỘNG TÀI SẢN' trong báo cáo. Vui lòng kiểm tra lại file.")
 
     tong_tai_san_N_1 = tong_tai_san_row['Năm trước'].iloc[0]
     tong_tai_san_N = tong_tai_san_row['Năm sau'].iloc[0]
@@ -315,21 +402,20 @@ def process_financial_data(df):
 
 def get_ai_analysis(data_for_ai, api_key):
     try:
-        # Khởi tạo client Gemini API
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-pro') # Sử dụng gemini-pro cho khả năng hiểu tốt hơn
+        model = genai.GenerativeModel('gemini-pro')
 
         prompt = f"""
-        Bạn là một chuyên gia phân tích tài chính chuyên nghiệp của Agribank, có kiến thức sâu rộng về thị trường Việt Nam. Dựa trên các chỉ số tài chính của một doanh nghiệp được cung cấp bên dưới, hãy đưa ra một nhận xét khách quan, chuyên sâu, ngắn gọn (khoảng 3-4 đoạn văn) về tình hình tài chính của doanh nghiệp. Đánh giá tập trung vào các điểm sau:
-        1.  **Tốc độ tăng trưởng:** Đánh giá sự tăng trưởng hoặc suy giảm của các chỉ tiêu chính (đặc biệt là Tài sản).
-        2.  **Cơ cấu tài sản:** Phân tích sự thay đổi trong cơ cấu tài sản giữa hai kỳ (Năm trước và Năm sau), nhận định về xu hướng đầu tư hoặc quản lý tài sản.
-        3.  **Khả năng thanh toán hiện hành:** Đánh giá khả năng đáp ứng các nghĩa vụ nợ ngắn hạn của doanh nghiệp.
-        4.  **Đưa ra khuyến nghị sơ bộ (nếu có):** Dựa trên phân tích, có thể đề xuất một hướng nghiên cứu sâu hơn hoặc một lưu ý quan trọng cho Agribank khi xem xét doanh nghiệp này.
+        Bạn là một chuyên gia phân tích tài chính cấp cao của Agribank, với kinh nghiệm sâu rộng về thị trường Việt Nam và nghiệp vụ tín dụng ngân hàng. Dựa trên các chỉ số tài chính của một doanh nghiệp được cung cấp bên dưới, hãy đưa ra một nhận xét khách quan, chuyên sâu, và có tính định hướng (khoảng 3-5 đoạn văn) về tình hình tài chính của doanh nghiệp. Phân tích cần tập trung vào:
+        1.  **Đánh giá tổng quan về tăng trưởng:** Nhận định về động lực tăng trưởng hoặc các yếu tố gây suy giảm.
+        2.  **Phân tích cơ cấu tài sản và nguồn vốn:** Đánh giá sự ổn định, hiệu quả sử dụng vốn và các rủi ro tiềm ẩn từ cơ cấu.
+        3.  **Khả năng thanh toán và rủi ro thanh khoản:** Phân tích sâu chỉ số thanh toán hiện hành, xu hướng và ý nghĩa của nó đối với khả năng hoạt động liên tục.
+        4.  **Đưa ra khuyến nghị chi tiết cho Agribank:** Dựa trên phân tích, đề xuất các bước hành động tiếp theo cho bộ phận tín dụng hoặc quản lý rủi ro của Agribank, ví dụ: cần xem xét thêm các chỉ tiêu nào, rủi ro cụ thể, tiềm năng hợp tác, hoặc các biện pháp bảo đảm.
 
-        Dữ liệu thô và các chỉ số được tính toán:
+        Dữ liệu thô và các chỉ số đã được tính toán:
         {data_for_ai}
 
-        Hãy đảm bảo nhận xét của bạn chuyên nghiệp, dễ hiểu và mang tính ứng dụng cao cho việc ra quyết định của ngân hàng.
+        Hãy đảm bảo nhận xét của bạn sử dụng ngôn ngữ chuyên ngành tài chính ngân hàng, dễ hiểu, và mang tính ứng dụng cao cho việc ra quyết định cấp tín dụng.
         """
 
         response = model.generate_content(prompt)
@@ -350,11 +436,10 @@ uploaded_file = st.file_uploader(
 if uploaded_file is not None:
     try:
         df_raw = pd.read_excel(uploaded_file)
-        # Đảm bảo cột có tên chính xác, nếu không sẽ gán lại
         if len(df_raw.columns) >= 3:
             df_raw.columns = ['Chỉ tiêu', 'Năm trước', 'Năm sau']
         else:
-            st.error("File Excel phải có ít nhất 3 cột: 'Chỉ tiêu', 'Năm trước', 'Năm sau'.")
+            st.error("File Excel phải có ít nhất 3 cột: 'Chỉ tiêu', 'Năm trước', 'Năm sau'. Vui lòng kiểm tra lại định dạng file.")
             st.stop()
 
         df_processed = process_financial_data(df_raw.copy())
@@ -370,10 +455,16 @@ if uploaded_file is not None:
 
         st.subheader("4. Các Chỉ số Tài chính Cơ bản")
         try:
-            tsnh_n = df_processed[df_processed['Chỉ tiêu'].str.contains('TÀI SẢN NGẮN HẠN', case=False, na=False)]['Năm sau'].iloc[0]
-            tsnh_n_1 = df_processed[df_processed['Chỉ tiêu'].str.contains('TÀI SẢN NGẮN HẠN', case=False, na=False)]['Năm trước'].iloc[0]
-            no_ngan_han_N = df_processed[df_processed['Chỉ tiêu'].str.contains('NỢ NGẮN HẠN', case=False, na=False)]['Năm sau'].iloc[0]
-            no_ngan_han_N_1 = df_processed[df_processed['Chỉ tiêu'].str.contains('NỢ NGẮN HẠN', case=False, na=False)]['Năm trước'].iloc[0]
+            tsnh_row = df_processed[df_processed['Chỉ tiêu'].str.contains('TÀI SẢN NGẮN HẠN', case=False, na=False)]
+            no_ngan_han_row = df_processed[df_processed['Chỉ tiêu'].str.contains('NỢ NGẮN HẠN', case=False, na=False)]
+
+            if tsnh_row.empty or no_ngan_han_row.empty:
+                raise IndexError("Thiếu chỉ tiêu 'TÀI SẢN NGẮN HẠN' hoặc 'NỢ NGẮN HẠN'.")
+
+            tsnh_n = tsnh_row['Năm sau'].iloc[0]
+            tsnh_n_1 = tsnh_row['Năm trước'].iloc[0]
+            no_ngan_han_N = no_ngan_han_row['Năm sau'].iloc[0]
+            no_ngan_han_N_1 = no_ngan_han_row['Năm trước'].iloc[0]
 
             thanh_toan_hien_hanh_N = tsnh_n / no_ngan_han_N if no_ngan_han_N != 0 else float('inf')
             thanh_toan_hien_hanh_N_1 = tsnh_n_1 / no_ngan_han_N_1 if no_ngan_han_N_1 != 0 else float('inf')
@@ -385,46 +476,41 @@ if uploaded_file is not None:
                 st.metric("Chỉ số Thanh toán Hiện hành (Năm sau)",
                           f"{thanh_toan_hien_hanh_N:.2f} lần",
                           delta=f"{(thanh_toan_hien_hanh_N - thanh_toan_hien_hanh_N_1):.2f}")
-        except IndexError:
-            st.warning("Thiếu chỉ tiêu 'TÀI SẢN NGẮN HẠN' hoặc 'NỢ NGẮN HẠN' để tính Chỉ số Thanh toán Hiện hành.")
+        except IndexError as ie:
+            st.warning(f"Thiếu dữ liệu để tính Chỉ số Thanh toán Hiện hành: {ie}. Vui lòng đảm bảo các chỉ tiêu cần thiết có trong file.")
             thanh_toan_hien_hanh_N = "N/A"
             thanh_toan_hien_hanh_N_1 = "N/A"
         except ZeroDivisionError:
-            st.error("Nợ ngắn hạn bằng 0, không thể tính chỉ số thanh toán hiện hành. Vui lòng kiểm tra dữ liệu.")
+            st.error("Nợ ngắn hạn bằng 0, không thể tính chỉ số thanh toán hiện hành. Vui lòng kiểm tra dữ liệu hoặc liên hệ hỗ trợ.")
             thanh_toan_hien_hanh_N = "N/A"
             thanh_toan_hien_hanh_N_1 = "N/A"
 
-        st.subheader("5. Nhận xét Tình hình Tài chính (AI)")
-        # Chuẩn bị dữ liệu để gửi cho AI
+        st.subheader("5. Nhận xét Chuyên sâu Tình hình Tài chính (AI)")
         data_for_ai_summary = df_processed[['Chỉ tiêu', 'Năm trước', 'Năm sau', 'Tốc độ tăng trưởng (%)', 'Tỷ trọng Năm trước (%)', 'Tỷ trọng Năm sau (%)']].copy()
         data_for_ai_summary.loc[len(data_for_ai_summary)] = ['Chỉ số Thanh toán Hiện hành (Năm trước)', thanh_toan_hien_hanh_N_1, None, None, None, None]
         data_for_ai_summary.loc[len(data_for_ai_summary)] = ['Chỉ số Thanh toán Hiện hành (Năm sau)', thanh_toan_hien_hanh_N, None, None, None, None]
 
-        # Chuyển đổi toàn bộ dataframe thành markdown để AI dễ đọc
         data_for_ai = data_for_ai_summary.to_markdown(index=False)
 
-
-        if st.button("Yêu cầu AI Phân tích Tình hình Tài chính", help="Nhấn để Gemini AI phân tích báo cáo và đưa ra nhận xét"):
+        if st.button("Yêu cầu AI Phân tích Chuyên sâu", help="Nhấn để Gemini AI phân tích báo cáo và đưa ra nhận xét chi tiết, có định hướng cho Agribank"):
             api_key = st.secrets.get("GEMINI_API_KEY")
             if api_key:
-                with st.spinner("Gemini AI đang tổng hợp và phân tích dữ liệu... Vui lòng chờ giây lát."):
+                with st.spinner("Gemini AI đang tổng hợp, phân tích chuyên sâu và đưa ra khuyến nghị... Vui lòng chờ giây lát."):
                     ai_result = get_ai_analysis(data_for_ai, api_key)
                     st.markdown("---")
                     st.markdown("<h3 style='color:#9E1B32;'>📝 Kết quả Phân tích từ Gemini AI:</h3>", unsafe_allow_html=True)
                     st.info(ai_result)
             else:
-                st.error("Không tìm thấy Khóa API. Vui lòng cấu hình 'GEMINI_API_KEY' trong Streamlit Secrets để sử dụng tính năng AI phân tích.")
+                st.error("Không tìm thấy Khóa API. Vui lòng cấu hình 'GEMINI_API_KEY' trong Streamlit Secrets để sử dụng tính năng AI phân tích chuyên sâu.")
 
     except ValueError as ve:
         st.error(f"Lỗi dữ liệu: {ve}. Vui lòng kiểm tra định dạng file Excel hoặc các chỉ tiêu tài chính cần thiết.")
     except Exception as e:
-        st.error(f"Đã xảy ra lỗi không mong muốn khi xử lý file: {e}. Vui lòng đảm bảo file Excel của bạn đúng định dạng.")
+        st.error(f"Đã xảy ra lỗi không mong muốn khi xử lý file: {e}. Vui lòng đảm bảo file Excel của bạn đúng định dạng và có đầy đủ dữ liệu.")
 else:
-    st.info("Vui lòng tải lên file Excel Báo cáo Tài chính để bắt đầu quá trình phân tích bởi TrungDev và Agribank AI.")
+    st.info("Chào mừng bạn đến với Hệ thống Phân tích Báo cáo Tài chính của Agribank! Vui lòng tải lên file Excel Báo cáo Tài chính để bắt đầu phân tích chuyên sâu.")
 
-# Thêm một chút không gian ở cuối để tránh chatbox che mất nội dung cuối cùng
-st.markdown("<div style='height: 100px;'></div>", unsafe_allow_html=True)
-
+st.markdown("<div style='height: 120px;'></div>", unsafe_allow_html=True)
 
 # --- Draggable Chatbox (JavaScript) ---
 import streamlit.components.v1 as components
@@ -437,11 +523,11 @@ components.html("""
 
 <div id="chatWindow">
   <div id="chatHeader">
-    Gemini Chat Agribank
-    <button id="closeBtn" onclick="closeChat()">❌</button>
+    Agribank AI Assistant
+    <button id="closeBtn" onclick="closeChat()">✖</button>
   </div>
   <div id="chatBody">
-    <p><i>Xin chào! Tôi là trợ lý AI của Agribank. Bạn muốn hỏi gì về báo cáo tài chính hoặc các dịch vụ khác?</i></p>
+    <p class="ai-message"><i>Xin chào! Tôi là trợ lý AI Agribank, sẵn sàng hỗ trợ bạn. Bạn muốn hỏi gì về báo cáo tài chính hoặc các dịch vụ ngân hàng khác?</i></p>
   </div>
   <div id="chatInput">
     <input type="text" id="userInput" placeholder="Nhập câu hỏi của bạn...">
@@ -453,115 +539,4 @@ components.html("""
   const bubble = document.getElementById("chatBubble");
   const chatWindow = document.getElementById("chatWindow");
   const chatHeader = document.getElementById("chatHeader");
-  const chatBody = document.getElementById("chatBody");
-  const userInput = document.getElementById("userInput");
-
-  let chatWindowPosX = 0;
-  let chatWindowPosY = 0;
-  let bubblePosX = 0;
-  let bubblePosY = 0;
-  let isDraggingChatWindow = false;
-  let isDraggingChatBubble = false;
-
-  // Set initial positions based on CSS 'right' and 'bottom'
-  function setInitialPositions() {
-    const windowRect = chatWindow.getBoundingClientRect();
-    chatWindowPosX = window.innerWidth - windowRect.width - parseInt(window.getComputedStyle(chatWindow).right);
-    chatWindowPosY = window.innerHeight - windowRect.height - parseInt(window.getComputedStyle(chatWindow).bottom);
-
-    const bubbleRect = bubble.getBoundingClientRect();
-    bubblePosX = window.innerWidth - bubbleRect.width - parseInt(window.getComputedStyle(bubble).right);
-    bubblePosY = window.innerHeight - bubbleRect.height - parseInt(window.getComputedStyle(bubble).bottom);
-  }
-  window.onload = setInitialPositions;
-  window.onresize = setInitialPositions; // Recalculate on resize
-
-  function openChat() {
-    bubble.style.display = "none";
-    chatWindow.style.display = "flex";
-    // Đảm bảo chat window không bị ẩn sau khi mở
-    if (chatWindow.style.right === "" || chatWindow.style.bottom === "") {
-        chatWindow.style.right = "30px";
-        chatWindow.style.bottom = "110px";
-    }
-  }
-
-  function closeChat() {
-    chatWindow.style.display = "none";
-    bubble.style.display = "flex";
-    // Đảm bảo chat bubble không bị ẩn sau khi đóng
-    if (bubble.style.right === "" || bubble.style.bottom === "") {
-        bubble.style.right = "30px";
-        bubble.style.bottom = "30px";
-    }
-  }
-
-  // Handle messages (placeholder for now)
-  function sendMessage() {
-    const userText = userInput.value.trim();
-    if (userText === "") return;
-
-    const userMsg = document.createElement("p");
-    userMsg.className = "user-message";
-    userMsg.innerHTML = "<b>Bạn:</b> " + userText;
-    chatBody.appendChild(userMsg);
-
-    const aiMsg = document.createElement("p");
-    aiMsg.className = "ai-message";
-    aiMsg.innerHTML = "<b>Gemini:</b> Cảm ơn bạn đã hỏi. Tính năng trả lời trực tiếp sẽ sớm được cập nhật. Hiện tại, bạn có thể sử dụng chức năng phân tích báo cáo tài chính phía trên nhé!";
-    chatBody.appendChild(aiMsg);
-
-    userInput.value = "";
-    chatBody.scrollTop = chatBody.scrollHeight; // Scroll to bottom
-  }
-
-  // Draggable logic for Chat Window
-  chatHeader.addEventListener("mousedown", function(e) {
-    isDraggingChatWindow = true;
-    chatWindowPosX = e.clientX - chatWindow.getBoundingClientRect().left;
-    chatWindowPosY = e.clientY - chatWindow.getBoundingClientRect().top;
-    chatWindow.style.cursor = "grabbing";
-    document.body.style.userSelect = "none";
-  });
-
-  // Draggable logic for Chat Bubble
-  bubble.addEventListener("mousedown", function(e) {
-    isDraggingChatBubble = true;
-    bubblePosX = e.clientX - bubble.getBoundingClientRect().left;
-    bubblePosY = e.clientY - bubble.getBoundingClientRect().top;
-    bubble.style.cursor = "grabbing";
-    document.body.style.userSelect = "none";
-  });
-
-  document.addEventListener("mouseup", function() {
-    isDraggingChatWindow = false;
-    isDraggingChatBubble = false;
-    chatWindow.style.cursor = "grab";
-    bubble.style.cursor = "grab";
-    document.body.style.userSelect = "auto";
-  });
-
-  document.addEventListener("mousemove", function(e) {
-    if (isDraggingChatWindow) {
-      chatWindow.style.left = (e.clientX - chatWindowPosX) + "px";
-      chatWindow.style.top = (e.clientY - chatWindowPosY) + "px";
-      chatWindow.style.right = "auto"; // Override right/bottom for dragging
-      chatWindow.style.bottom = "auto";
-    }
-    if (isDraggingChatBubble) {
-      bubble.style.left = (e.clientX - bubblePosX) + "px";
-      bubble.style.top = (e.clientY - bubblePosY) + "px";
-      bubble.style.right = "auto";
-      bubble.style.bottom = "auto";
-    }
-  });
-
-  // Prevent default submit on Enter key for input field
-  userInput.addEventListener("keypress", function(e) {
-    if (e.key === "Enter") {
-      e.preventDefault(); // Prevent form submission
-      sendMessage();
-    }
-  });
-</script>
-""", height=30) # Chiều cao có thể điều chỉnh để không làm ảnh hưởng layout chính
+  const chatBody = document.
