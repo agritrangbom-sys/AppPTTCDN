@@ -166,9 +166,13 @@ if uploaded_file is not None:
                     st.info(ai_result)
             else:
                 st.error("Không tìm thấy Khóa API. Vui lòng cấu hình 'GEMINI_API_KEY' trong Streamlit Secrets.")
-# chatbox
-import streamlit.components.v1 as components
 
+    except Exception as e:
+        st.error(f"Lỗi xử lý file: {e}")
+else:
+    st.info("Vui lòng tải lên file Excel để bắt đầu phân tích.")
+
+import streamlit.components.v1 as components
 components.html("""
 <style>
   #chatBubble {
@@ -344,8 +348,3 @@ components.html("""
   }
 </script>
 """, height=600)
-    except Exception as e:
-        st.error(f"Lỗi xử lý file: {e}")
-else:
-    st.info("Vui lòng tải lên file Excel để bắt đầu phân tích.")
-
