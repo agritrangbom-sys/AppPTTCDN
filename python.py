@@ -167,7 +167,6 @@ if uploaded_file is not None:
 else:
     st.info("Vui lòng tải lên file Excel để bắt đầu phân tích.")
 
-# --- Bong bóng chat nổi duy nhất, di chuyển tự do ---
 components.html("""
 <style>
   #chatBubble {
@@ -176,4 +175,116 @@ components.html("""
     right: 20px;
     width: 50px;
     height: 50px;
-    background-color: #
+    background-color: #9E1B32;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    cursor: move;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    user-select: none;
+  }
+
+  #chatPopup {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 280px;
+    background: rgba(255,255,255,0.95);
+    border: 2px solid #9E1B32;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    display: none;
+    flex-direction: column;
+    z-index: 9998;
+    backdrop-filter: blur(6px);
+    padding: 10px;
+    font-family: sans-serif;
+  }
+
+  #chatPopup input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #9E1B32;
+    border-radius: 5px;
+    margin-bottom: 8px;
+  }
+
+  #chatPopup button {
+    background-color: #9E1B32;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  #chatPopup button:hover {
+    background-color: #00703C;
+  }
+
+  #chatPopup p {
+    font-size: 14px;
+    margin-top: 8px;
+  }
+</style>
+
+<div id="chatBubble" onclick="togglePopup()">💬</div>
+
+<div id="chatPopup">
+  <input type="text" id="userInput" placeholder="Nhập câu hỏi...">
+  <button onclick="sendMessage()">Gửi</button>
+  <p id="responseText"><i>Phản hồi từ Gemini sẽ hiển thị ở đây.</i></p>
+</div>
+
+<script>
+  const bubble = document.getElementById("chatBubble");
+  const popup = document.getElementById("chatPopup");
+
+  function togglePopup() {
+    popup.style.display = popup.style.display === "none" ? "flex" : "none";
+  }
+
+  function sendMessage() {
+    const input = document.getElementById("userInput");
+    const response = document.getElementById("responseText");
+    const question = input.value.trim();
+    if (question === "") return;
+    response.innerHTML = "<b>Bạn:</b> " + question + "<br><b>Gemini:</b> Đang xử lý...";
+    input.value = "";
+  }
+
+  let isDragging = false;
+  let offsetX = 0, offsetY = 0;
+
+  bubble.addEventListener("mousedown", function(e) {
+    isDragging = true;
+    offsetX = e.clientX - bubble.getBoundingClientRect().left;
+    offsetY = e.clientY - bubble.getBoundingClientRect().top;
+    document.body.style.userSelect = "none";
+  });
+
+  document.addEventListener("mouseup", function() {
+    isDragging = false;
+    document.body.style.userSelect = "auto";
+  });
+
+  document.addEventListener("mousemove", function(e) {
+    if (isDragging) {
+      bubble.style.left = (e.clientX - offsetX) + "px";
+      bubble.style.top = (e.clientY - offsetY) + "px";
+      bubble.style.right = "auto";
+      bubble.style.bottom = "auto";
+      popup.style.left = bubble.style.left;
+      popup.style.top = (parseInt(bubble.style.top) - 60) + "px";
+      popup.style.right = "auto";
+      popup.style.bottom = "auto";
+    }
+  });
+</script>
+""", height=300)
