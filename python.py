@@ -2,9 +2,22 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-import google.generativeai as genai # Thêm thư viện Gemini
+import google.generativeai as genai
+from streamlit_chat import message # Import message từ streamlit_chat
 
-# --- 1. Hàm Tải Dữ Liệu (Không đổi) ---
+# --- 1. Cấu hình Gemini API ---
+def configure_gemini():
+    try:
+        genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+        return True
+    except KeyError:
+        st.error("GOOGLE_API_KEY chưa được cấu hình trong .streamlit/secrets.toml")
+        return False
+    except Exception as e:
+        st.error(f"Lỗi cấu hình Gemini API: {e}")
+        return False
+
+# --- 2. Hàm Tải Dữ Liệu (Không đổi) ---
 def load_financial_data(file_path="financial_data.xlsx"):
     try:
         bckt = pd.read_excel(file_path, sheet_name="Bảng Cân Đối Kế Toán").set_index('Chỉ tiêu')
@@ -21,7 +34,7 @@ def load_financial_data(file_path="financial_data.xlsx"):
         st.error(f"Có lỗi xảy ra khi đọc file Excel: {e}")
         st.stop()
 
-# --- 2. Hàm Tính Toán Các Chỉ Số Tài Chính (Không đổi) ---
+# --- 3. Hàm Tính Toán Các Chỉ Số Tài Chính (Không đổi) ---
 def calculate_financial_ratios(bckt, kqkd):
     ratios = {}
     periods = bckt.columns
@@ -61,7 +74,7 @@ def calculate_financial_ratios(bckt, kqkd):
     ratios_df_final = pd.DataFrame(formatted_ratios, index=periods).T
     return ratios_df_final
 
-# --- 3. Hàm Trực Quan Hóa (Không đổi) ---
+# --- 4. Hàm Trực Quan Hóa (Không đổi) ---
 def plot_financial_data(df, title, y_axis_title):
     fig = go.Figure()
     for col in df.columns:
@@ -99,28 +112,18 @@ def plot_ratio_trends(ratios_df):
     fig.update_yaxes(tickformat=".2%", title_text="Tỷ lệ")
     return fig
 
-# --- 4. Hàm Phân Tích Chuyên Sâu của AI (Sử dụng Gemini) ---
+
+# --- 5. Hàm Phân Tích Chuyên Sâu của AI (Sử dụng Gemini) ---
 def get_ai_financial_analysis(bckt_df, kqkd_df, ratios_df):
-    # Cấu hình Gemini với API Key từ Streamlit secrets
-    try:
-        genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
-    except KeyError:
-        st.error("GOOGLE_API_KEY chưa được cấu hình trong .streamlit/secrets.toml")
-        return None
-    except Exception as e:
-        st.error(f"Lỗi cấu hình Gemini API: {e}")
+    if not configure_gemini():
         return None
 
-    # Chọn mô hình Gemini
-    # Có thể dùng "gemini-pro" cho văn bản hoặc các biến thể mới hơn nếu có
     model = genai.GenerativeModel('gemini-pro')
 
-    # Chuyển đổi DataFrames thành chuỗi để đưa vào prompt
     bckt_str = bckt_df.to_markdown()
     kqkd_str = kqkd_df.to_markdown()
     ratios_str = ratios_df.to_markdown(floatfmt=".2%")
 
-    # Xây dựng prompt
     prompt = f"""
     Bạn là một chuyên gia phân tích tài chính cấp cao của Agribank, với kinh nghiệm sâu rộng về thị trường Việt Nam và nghiệp vụ tín dụng ngân hàng. Dựa trên các chỉ số tài chính của một doanh nghiệp được cung cấp bên dưới, hãy đưa ra một nhận xét khách quan, chuyên sâu, và có tính định hướng (khoảng 3-5 đoạn văn) về tình hình tài chính của doanh nghiệp. Phân tích cần tập trung vào:
     1.  **Đánh giá tổng quan về tăng trưởng:** Nhận định về động lực tăng trưởng hoặc các yếu tố gây suy giảm.
@@ -146,21 +149,42 @@ def get_ai_financial_analysis(bckt_df, kqkd_df, ratios_df):
 
     try:
         with st.spinner("AI (Gemini) đang phân tích dữ liệu tài chính..."):
-            # Gọi API của Gemini
             response = model.generate_content(
                 prompt,
                 generation_config=genai.types.GenerationConfig(
-                    temperature=0.7, # Điều chỉnh để có câu trả lời sáng tạo hơn (cao hơn) hoặc tập trung hơn (thấp hơn)
-                    max_output_tokens=1000 # Giới hạn độ dài phản hồi
+                    temperature=0.7,
+                    max_output_tokens=1000
                 )
             )
-            return response.text # Lấy nội dung văn bản từ phản hồi
+            return response.text
     except Exception as e:
         st.error(f"Lỗi khi gọi API Gemini: {e}. Vui lòng kiểm tra API Key và giới hạn sử dụng.")
         return None
 
-# --- 5. Giao Diện Ứng Dụng Streamlit (Giữ nguyên) ---
-st.set_page_config(layout="wide", page_title="Phân Tích Báo Cáo Tài Chính")
+# --- 6. Hàm Chatbot sử dụng Gemini ---
+def get_gemini_chat_response(user_input, chat_history):
+    if not configure_gemini():
+        return "Lỗi cấu hình API Gemini."
+
+    model = genai.GenerativeModel('gemini-pro')
+    chat = model.start_chat(history=chat_history)
+
+    try:
+        response = chat.send_message(user_input)
+        return response.text
+    except Exception as e:
+        return f"Lỗi khi giao tiếp với Gemini: {e}"
+
+# --- 7. Giao Diện Ứng Dụng Streamlit ---
+st.set_page_config(layout="wide", page_title="Phân Tích Báo Cáo Tài Chính", initial_sidebar_state="expanded") # Mở sidebar mặc định
+
+# Khởi tạo session state cho chatbox
+if 'chat_messages' not in st.session_state:
+    st.session_state['chat_messages'] = []
+if 'show_chatbox' not in st.session_state:
+    st.session_state['show_chatbox'] = False
+if 'gemini_chat_history' not in st.session_state:
+    st.session_state['gemini_chat_history'] = [] # Lịch sử chat cho Gemini API
 
 st.title("Ứng Dụng Phân Tích Báo Cáo Tài Chính Doanh Nghiệp")
 st.write("Phân tích các báo cáo tài chính cơ bản, tính toán các chỉ số quan trọng và nhận định chuyên sâu từ AI.")
@@ -229,7 +253,7 @@ if not bckt.empty and not kqkd.empty:
 
     st.subheader("Phân tích Doanh thu và Lợi nhuận")
     kqkd_plot_items = ['Doanh thu bán hàng và cung cấp dịch vụ', 'Giá vốn hàng bán', 'Lợi nhuận gộp về bán hàng và cung cấp dịch vụ',
-                                 'Lợi nhuận thuần từ hoạt động kinh doanh', 'Lợi nhuận sau thuế TNDN']
+                                 'Lợi nhuận thuần từ hoạt động kinh doanh', 'Lợi nhuận khác', 'Lợi nhuận kế toán trước thuế', 'Lợi nhuận sau thuế TNDN'] # Thêm các chỉ tiêu liên quan đến lợi nhuận
     existing_kqkd_items = [item for item in kqkd_plot_items if item in kqkd.index]
 
     if existing_kqkd_items:
@@ -246,6 +270,39 @@ if not bckt.empty and not kqkd.empty:
         ai_analysis = get_ai_financial_analysis(bckt, kqkd, ratios_df)
         if ai_analysis:
             st.markdown(ai_analysis)
+
+# --- Chatbot ở Sidebar hoặc dưới dạng "bong bóng" cố định ---
+
+# Nút chuyển đổi chatbox (bong bóng <-> cửa sổ)
+# Để làm được "kéo thả tự do" như bạn nói, chúng ta cần dùng Streamlit Components phức tạp hơn.
+# Với cách hiện tại, chúng ta sẽ mô phỏng nó bằng cách chuyển đổi giữa hiển thị ở Sidebar và Main content.
+
+# Cố gắng tạo một nút toggle ở vị trí cố định
+st.sidebar.markdown("---")
+if st.sidebar.button("💬 Chat với AI", key="toggle_chat"):
+    st.session_state['show_chatbox'] = not st.session_state['show_chatbox']
+    # if st.session_state['show_chatbox']: # Reset chat khi mở lại
+    #     st.session_state['chat_messages'] = []
+    #     st.session_state['gemini_chat_history'] = []
+
+if st.session_state['show_chatbox']:
+    # Hiển thị chatbox trong sidebar
+    st.sidebar.subheader("Chat với Chuyên gia AI")
+
+    for i, msg in enumerate(st.session_state['chat_messages']):
+        message(msg['content'], is_user=msg['is_user'], key=str(i))
+
+    user_input = st.sidebar.chat_input("Hỏi về báo cáo tài chính...")
+
+    if user_input:
+        st.session_state['chat_messages'].append({"content": user_input, "is_user": True})
+        with st.sidebar.spinner("AI đang trả lời..."):
+            ai_response = get_gemini_chat_response(user_input, st.session_state['gemini_chat_history'])
+            st.session_state['chat_messages'].append({"content": ai_response, "is_user": False})
+            # Cập nhật lịch sử chat cho Gemini API
+            st.session_state['gemini_chat_history'].append({'role': 'user', 'parts': [user_input]})
+            st.session_state['gemini_chat_history'].append({'role': 'model', 'parts': [ai_response]})
+        st.experimental_rerun() # Tự động refresh để hiển thị tin nhắn mới
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("### Về ứng dụng")
