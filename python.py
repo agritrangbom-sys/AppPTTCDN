@@ -49,7 +49,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.title("Phân Tích Báo Cáo Tài Chính 📊")
+st.title("Phân Tích Báo Cáo Tài Chính - TrungDev x Agribank 📊")
 
 @st.cache_data
 def process_financial_data(df):
@@ -174,8 +174,8 @@ else:
 
 import streamlit.components.v1 as components
 
-# --- Chức năng 6: Chat nổi dạng bong bóng và cửa sổ di chuyển ---
-st.subheader("6. Chat nổi với Gemini 💬")
+# chatbox
+import streamlit.components.v1 as components
 
 components.html("""
 <style>
@@ -261,7 +261,7 @@ components.html("""
   }
 </style>
 
-<div id="chatBubble" onclick="toggleChat()">💬</div>
+<div id="chatBubble" onclick="openChat()">💬</div>
 
 <div id="chatWindow">
   <div id="chatHeader">Gemini Chat</div>
@@ -275,13 +275,14 @@ components.html("""
 </div>
 
 <script>
-  // Toggle chat window
-  function toggleChat() {
-    const chatWindow = document.getElementById("chatWindow");
-    chatWindow.style.display = chatWindow.style.display === "none" ? "flex" : "none";
+  const bubble = document.getElementById("chatBubble");
+  const chatWindow = document.getElementById("chatWindow");
+
+  function openChat() {
+    bubble.style.display = "none";
+    chatWindow.style.display = "flex";
   }
 
-  // Gửi tin nhắn
   function sendMessage() {
     const input = document.getElementById("userInput");
     const chatBody = document.getElementById("chatBody");
@@ -300,7 +301,6 @@ components.html("""
     chatBody.scrollTop = chatBody.scrollHeight;
   }
 
-  // Di chuyển cửa sổ chat
   makeDraggable("chatWindow", "chatHeader");
   makeDraggable("chatBubble", null);
 
